@@ -1,14 +1,23 @@
-from pymongo import MongoClient
 import datetime
 import timeit
 from functools import partial
 from random import randrange
 
+import sys
+
+from mongo import setup_mongo, store_annotation as mongo_store, \
+    retrieve_annotation_by_target as mongo_by_target, \
+    retrieve_annotation_by_body as mongo_by_body
+
+from neo import connect, store_annotation as neo_store, \
+    retrieve_annotation_by_target as neo_by_target, \
+    retrieve_annotation_by_body as neo_by_body
+
 NR = 1
 
 
 def get_time():
-    return datetime.datetime.utcnow()
+    return datetime.datetime.utcnow().strftime('%x')
 
 
 def generate_id():
@@ -30,37 +39,6 @@ def generate_annotation(time_generator, id_generator):
     return annotation
 
 
-# mongo part
-
-def setup_mongo():
-    client = MongoClient()
-    db = client['db']
-    annotations = db['collection']
-    return annotations
-
-
-def store_annotation(annotation, annotations):
-    anno_id = annotations.insert_one(annotation).inserted_id
-    return anno_id
-
-
-def retrieve_annotation_by_target(target_id, annotations):
-    return retrieve_annotation_by_key_value(annotations=annotations,
-                                            key='target.jsonld_id',
-                                            value=target_id)
-
-
-def retrieve_annotation_by_body(body_id, annotations):
-    return retrieve_annotation_by_key_value(annotations=annotations,
-                                            key='body.jsonld_id',
-                                            value=body_id)
-
-
-def retrieve_annotation_by_key_value(annotations, key, value):
-    anno2 = annotations.find_one({key: value})
-    return anno2
-
-
 ## testing part
 
 def test_creation(store_function):
@@ -70,47 +48,65 @@ def test_creation(store_function):
         store_function(annotation=annotation)
 
 
-def test_retrieval(retrive_function):
+def test_retrieval(retrieve_function):
     for _ in range(0, 10, 1):
         random_id = randrange(1, NR)
-        ret = retrive_function(random_id)
+        _ = retrieve_function(random_id)
 
-
-def do_mongo_test_1():
+def setup_mongo_tests():
     annotations = setup_mongo()
-    annotation_store = partial(store_annotation, annotations=annotations)
-    test_creation(annotation_store)
+    store_function = partial(mongo_store, annotations=annotations)
+    retrieve_function_1 = partial(mongo_by_target, annotations=annotations)
+    retrieve_function_2 = partial(mongo_by_body, annotations=annotations)
+    return store_function, retrieve_function_1, retrieve_function_2
 
 
-def do_mongo_test_2():
-    annotations = setup_mongo()
-    retrive_function = partial(retrieve_annotation_by_target,
-                               annotations=annotations)
-    test_retrieval(retrive_function)
-
-
-def do_mongo_test_3():
-    annotations = setup_mongo()
-    retrive_function = partial(retrieve_annotation_by_body,
-                               annotations=annotations)
-    test_retrieval(retrive_function)
+def setup_neo_tests():
+    graph = connect()
+    store_function = partial(neo_store, graph=graph)
+    retrieve_function_1 = partial(neo_by_target, graph=graph)
+    retrieve_function_2 = partial(neo_by_body, graph=graph)
+    return store_function, retrieve_function_1, retrieve_function_2
 
 
 if __name__ == "__main__":
+    if len(sys.argv) == 1:
+        print 'Provide an argument what to test (neo or mongo)?'
+        sys.exit(-1)
+
+    wtt = sys.argv[1]
+    print 'Testing %s' %wtt
+
+
+    st = """\
+    f1, f2, f3 = setup_tests()
+    test_creation(f1)
+    """
     print 'Staring test: write'
-    value = timeit.timeit("do_mongo_test_1()", setup="from __main__ import "
-                                                     "do_mongo_test_1",
+    value = timeit.timeit(st,
+                          setup="from __main__ import setup_%s_tests as "
+                                "setup_tests, test_creation" % wtt,
                           number=100)
     print 'Done. Elapsed time %s' % value
 
+    st = """\
+        f1, f2, f3 = setup_tests()
+        test_retrieval(f2)
+        """
     print 'Staring test: read target'
-    value = timeit.timeit("do_mongo_test_2()", setup="from __main__ import "
-                                                     "do_mongo_test_2",
+    value = timeit.timeit(st,
+                          setup="from __main__ import setup_%s_tests as "
+                                "setup_tests, test_retrieval" % wtt,
                           number=100)
     print 'Done. Elapsed time %s' % value
 
+    st = """\
+            f1, f2, f3 = setup_tests()
+            test_retrieval(f3)
+            """
     print 'Staring test: read body'
-    value = timeit.timeit("do_mongo_test_3()", setup="from __main__ import "
-                                                     "do_mongo_test_3",
+    value = timeit.timeit(st,
+                          setup="from __main__ import setup_%s_tests as "
+                                "setup_tests, test_retrieval" % wtt,
                           number=100)
     print 'Done. Elapsed time %s' % value
