@@ -1,4 +1,3 @@
-# mongo part
 from pymongo import MongoClient
 
 
@@ -10,8 +9,7 @@ def setup_mongo():
 
 
 def store_annotation(annotation, annotations):
-    anno_id = annotations.insert_one(annotation).inserted_id
-    return anno_id
+    return annotations.insert_one(annotation).inserted_id
 
 
 def retrieve_annotation_by_target(target_id, annotations):
@@ -27,5 +25,4 @@ def retrieve_annotation_by_body(body_id, annotations):
 
 
 def retrieve_annotation_by_key_value(annotations, key, value):
-    anno2 = annotations.find_one({key: value})
-    return anno2
+    return annotations.find_one({key: value})
