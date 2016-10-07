@@ -25,6 +25,10 @@ def connect():
     return session
 
 
+def disconnect(session):
+    session.close()
+
+
 def store_annotation(annotation, graph):
     result = graph.run(
         "MERGE (b:Body {jsonld_id: {body_id}}) "

@@ -8,6 +8,10 @@ def setup_mongo():
     return annotations
 
 
+def teardown_mongo(collection):
+    collection.database.client.close()
+
+
 def store_annotation(annotation, annotations):
     return annotations.insert_one(annotation).inserted_id
 
