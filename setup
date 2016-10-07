@@ -1,0 +1,2 @@
+docker run -d -p 7687:7687 -p 7474:7474 --env=NEO4J_AUTH=none neo4j
+docker run -d -p 27017:27017  mongo:latest

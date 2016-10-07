@@ -3,6 +3,8 @@ import timeit
 from functools import partial
 from random import randrange
 import sys
+from progressbar import ProgressBar
+from prettytable import PrettyTable
 
 from mongo import setup_mongo, store_annotation as mongo_store, \
     retrieve_annotation_by_target as mongo_by_target, \
@@ -88,45 +90,55 @@ def setup_empty_tests():
 
 
 def log(param):
-    print param
-
+    # print param
+    pass
 
 if __name__ == "__main__":
     if len(sys.argv) == 1 or sys.argv[1] not in ['neo', 'mongo', 'empty']:
         print 'Provide an argument what to test (neo or mongo)?'
         sys.exit(-1)
 
+    bar = ProgressBar()
+    table = PrettyTable(['run', 'write', 'read_target', 'read_body'])
+
     wtt = sys.argv[1]
-    for _ in range(1, 5):
+    for i in bar(range(1, 5)):
+        a = ['Run %s' % i]
         log('Starting %s write tests' % wtt)
         st = """\
-        f1, f2, f3 = setup_tests()
-        test_creation(f1)
+f1, f2, f3 = setup_tests()
+test_creation(f1)
         """
         value = timeit.timeit(st,
                               setup="from __main__ import setup_%s_tests as "
                                     "setup_tests, test_creation" % wtt,
                               number=1000)
         log('%s write result: %s' % (wtt, value))
+        a.append(value)
 
         log('Starting %s read_target tests' % wtt)
         st = """\
-            f1, f2, f3 = setup_tests()
-            test_retrieval(f2, TARGET_NR)
+f1, f2, f3 = setup_tests()
+test_retrieval(f2, TARGET_NR)
             """
         value = timeit.timeit(st,
                               setup="from __main__ import setup_%s_tests as "
                                     "setup_tests, TARGET_NR, test_retrieval" % wtt,
                               number=1000)
         log('%s read_target result: %s' % (wtt, value))
+        a.append(value)
 
         st = """\
-                f1, f2, f3 = setup_tests()
-                test_retrieval(f3, BODY_NR)
-                """
+f1, f2, f3 = setup_tests()
+test_retrieval(f3, BODY_NR)
+        """
         log('Staring %s read_body tests' % wtt)
         value = timeit.timeit(st,
                               setup="from __main__ import setup_%s_tests as "
                                     "setup_tests, BODY_NR, test_retrieval" % wtt,
                               number=1000)
         log('%s read_target result %s' % (wtt, value))
+        a.append(value)
+        table.add_row(a)
+
+    print table
