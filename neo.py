@@ -1,4 +1,7 @@
+from functools import partial
+
 from neo4j.v1 import GraphDatabase
+import os
 
 
 def clean_db(session):
@@ -18,11 +21,27 @@ def create_constraints(session):
 
 
 def connect():
+    host = os.getenv("NEO_PORT_7687_TCP_ADDR", "localhost")
+    port = os.getenv("NEO_PORT_7687_TCP_PORT", "7687")
     # docker run -d -p 7687:7687 -p 7474:7474 --env=NEO4J_AUTH=none neo4j
-    driver = GraphDatabase.driver("bolt://localhost", auth=None,
+    driver = GraphDatabase.driver("bolt://%s:%s" % (host, port),
+                                  auth=None,
                                   encrypted=False)
     session = driver.session()
     return session
+
+class executor:
+    def __enter__(self):
+        self.graph = connect()
+        create_constraints(self.graph)
+        store_function = partial(store_annotation, graph=self.graph)
+        retrieve_function_1 = partial(retrieve_annotation_by_target, graph=self.graph)
+        retrieve_function_2 = partial(retrieve_annotation_by_body, graph=self.graph)
+        return store_function, retrieve_function_1, retrieve_function_2
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        disconnect(self.graph)
+
 
 
 def disconnect(session):
