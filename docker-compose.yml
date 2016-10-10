@@ -1,10 +1,11 @@
 mongo:
   image: mongo:latest
-  command: --smallfiles
 neo:
-  image: neo:latest
+  image: neo4j:latest
+  environment:
+     - NEO4J_AUTH=none
 tester:
-  image: .
+  image: tester:latest
   links:
     - mongo
     - neo

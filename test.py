@@ -1,11 +1,10 @@
 #!/usr/bin/env python
 import argparse
 import datetime
-import time
-from random import randrange
-import sys
 from progressbar import ProgressBar
 from prettytable import PrettyTable
+from random import randrange
+import time
 
 TARGET_NR = 1
 
@@ -58,12 +57,6 @@ def test_retrieval(retrieve_function, range_limit, reps=10):
         _ = retrieve_function(random_id)
 
 
-
-def log(param):
-    # print param
-    pass
-
-
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Performance tester')
     parser.add_argument('module', choices=['neo', 'mongo', 'dummy'])
@@ -77,36 +70,29 @@ if __name__ == "__main__":
 
     runs = args.runs
     reps = args.reps
-
     wtt = args.module
     testing_module = __import__("%s" % wtt)
 
+    print 'Testing %s with (%d, %d)' % (wtt, runs, reps)
     for i in bar(range(runs)):
         a = ['Run %s' % i]
-        log('Starting %s write tests' % wtt)
         with testing_module.executor() as f:
             start = time.time()
             test_creation(f[0], reps)
             value = time.time() - start
-            log('%s write result: %s' % (wtt, value))
             a.append("{0:.7f}".format(value))
 
-        log('Starting %s read_target tests' % wtt)
         with testing_module.executor() as f:
             start = time.time()
             test_retrieval(f[1], TARGET_NR, reps)
             value = time.time() - start
-            log('%s read_target result: %s' % (wtt, value))
             a.append("{0:.7f}".format(value))
 
-        log('Staring %s read_body tests' % wtt)
         with testing_module.executor() as f:
             start = time.time()
             test_retrieval(f[2], BODY_NR, reps)
             value = time.time() - start
-            log('%s read_target result %s' % (wtt, value))
             a.append("{0:.7f}".format(value))
-
-        table.add_row(a)
+            table.add_row(a)
 
     print table

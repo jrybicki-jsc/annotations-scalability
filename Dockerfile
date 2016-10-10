@@ -1,13 +1,14 @@
 FROM debian:wheezy
 MAINTAINER jj
-RUN useradd tester
-RUN DBEIAN_FRONTEND=noninteractive apt-get update && apt-get install wget python python-pip -y && \
+RUN DBEIAN_FRONTEND=noninteractive apt-get update && \
+   apt-get install wget python python-pip -y && \
    apt-get clean autoclean && apt-get autoremove && \
    rm -rf /var/lib/{apt,dpkg,cache,log}
-RUN mkdir /app/
 VOLUME /results/
+RUN mkdir /app/
 ADD . /app/
 WORKDIR /app/
-RUN pip install -r /app/requirements.txt && chown -R tester:tester /app/
-USER tester
-CMD /app/test.py > /results/result.txt
+RUN pip install -r /app/requirements.txt && chmod +x /app/test.py
+CMD /app/test.py dummy 10 100 >> /results/result.txt && \
+    /app/test.py neo 10 100 >> /results/result.txt &&  \
+    /app/test.py mongo 10 100 >> /results/result.txt
