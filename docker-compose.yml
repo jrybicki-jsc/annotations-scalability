@@ -1,0 +1,10 @@
+mongo:
+  image: mongo:latest
+  command: --smallfiles
+neo:
+  image: neo:latest
+tester:
+  image: .
+  links:
+    - mongo
+    - neo
