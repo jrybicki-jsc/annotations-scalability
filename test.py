@@ -41,8 +41,6 @@ def generate_annotation(time_generator, body_id_generator,
     return annotation
 
 
-## testing part
-
 def test_creation(store_function, reps=10):
     for _ in range(reps):
         annotation = generate_annotation(body_id_generator=generate_body_id,
@@ -95,4 +93,4 @@ if __name__ == "__main__":
             a.append("{0:.7f}".format(value))
             table.add_row(a)
 
-    print table
+    print(table)

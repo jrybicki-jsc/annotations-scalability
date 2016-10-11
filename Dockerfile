@@ -1,7 +1,7 @@
 FROM debian:wheezy
 MAINTAINER jj
 RUN DBEIAN_FRONTEND=noninteractive apt-get update && \
-   apt-get install wget python python-pip -y && \
+   apt-get install python python-pip -y && \
    apt-get clean autoclean && apt-get autoremove && \
    rm -rf /var/lib/{apt,dpkg,cache,log}
 VOLUME /results/
