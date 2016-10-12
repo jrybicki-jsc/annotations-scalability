@@ -11,5 +11,6 @@ docker run --rm --link mongo:mongo tester sh -c '/app/test.py mongo 10 1000'
 docker-compose build
 docker-compose run --name testv2 tester
 
-
-docker run -it --rm --volumes-from testv2
+docker run --rm --volumes-from testv2 processor
+docker run --rm --volumes-from testv2 vizualizer
+docker run --rm --volumes-from testv2 -v /tmp/out2/:/outputs/ busybox sh -c 'cp /results/* /outputs/' 
