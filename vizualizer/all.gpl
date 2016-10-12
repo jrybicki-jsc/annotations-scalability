@@ -4,8 +4,8 @@ set xlabel "Runs"
 set ylabel "Time [ms]"
 
 plot 'mongo-result.csv.creation' with lines title 'mongo: creation',\
-     'mongo-result.csv.bytarget' using 2 with lines title 'mongo: target_id',\
-     'mongo-result.csv.bybody' using 3 with lines title 'mongo: body_id',\
+     'mongo-result.csv.bytarget'  with lines title 'mongo: target_id',\
+     'mongo-result.csv.bybody' with lines title 'mongo: body_id',\
      'neo-result.csv.creation' with lines title 'neo: creation',\
-     'neo-result.csv.bytarget' using 2 with lines title 'neo: target_id',\
-     'neo-result.csv.bybody' using 3 with lines title 'neo: body_id'
+     'neo-result.csv.bytarget' with lines title 'neo: target_id',\
+     'neo-result.csv.bybody' with lines title 'neo: body_id'

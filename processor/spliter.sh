@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/bin/sh
 for f in /results/*-result.csv ;
 do
    echo 'Processing: ' $f

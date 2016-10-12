@@ -3,5 +3,5 @@ set output 'bybody.png'
 set xlabel "Runs"
 set ylabel "Time [ms]"
 
-plot 'mongo-result.csv.bybody' using 3 with lines title 'mongo: body_id',\
-     'neo-result.csv.bybody' using 3 with lines title 'neo: body_id'
+plot 'mongo-result.csv.bybody' with lines title 'mongo: body_id',\
+     'neo-result.csv.bybody' with lines title 'neo: body_id'

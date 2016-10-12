@@ -8,4 +8,8 @@ docker-compose run --name test tester sh -c ' sleep 3 && ./test.py dummy 10 1000
 or with docker
 docker run --rm --link mongo:mongo tester sh -c '/app/test.py mongo 10 1000'
 
+docker-compose build
+docker-compose run --name testv2 tester
 
+
+docker run -it --rm --volumes-from testv2

@@ -3,5 +3,5 @@ set output 'bytarget.png'
 set xlabel "Runs"
 set ylabel "Time [ms]"
 
-plot 'mongo-result.csv.bytarget' using 2 with lines title 'mongo: target_id',\
-     'neo-result.csv.bytarget' using 2 with lines title 'neo: target_id'
+plot 'mongo-result.csv.bytarget' with lines title 'mongo: target_id',\
+     'neo-result.csv.bytarget' with lines title 'neo: target_id'
