@@ -1,0 +1,7 @@
+set terminal png
+set output 'creations.png'
+set xlabel "Runs"
+set ylabel "Time [ms]"
+
+plot 'neo-result.csv.creation' with lines title 'neo: creation',\
+     'mongo-result.csv.creation' using 2 with lines title 'mongo: creation'

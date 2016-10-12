@@ -5,7 +5,8 @@ neo:
   environment:
      - NEO4J_AUTH=none
 tester:
-  image: tester:latest
+  build: .
+  dockerfile: Dockerfile-tester
   links:
     - mongo
     - neo

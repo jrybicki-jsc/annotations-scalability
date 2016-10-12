@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import argparse
+import csv
 import datetime
 from progressbar import ProgressBar
 from prettytable import PrettyTable
@@ -70,6 +71,7 @@ if __name__ == "__main__":
     reps = args.reps
     wtt = args.module
     testing_module = __import__("%s" % wtt)
+    b = []
 
     print 'Testing %s with (%d, %d)' % (wtt, runs, reps)
     for i in bar(range(runs)):
@@ -91,6 +93,12 @@ if __name__ == "__main__":
             test_retrieval(f[2], BODY_NR, reps)
             value = time.time() - start
             a.append("{0:.7f}".format(value))
+
             table.add_row(a)
+            b.append(a)
 
     print(table)
+    with open('%s-result.csv' % wtt, 'wb') as f:
+        writer = csv.writer(f)
+        writer.writerows(b)
+
