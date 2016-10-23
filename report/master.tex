@@ -1,0 +1,62 @@
+\documentclass[a4paper,10pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[ngerman,english]{babel}
+\usepackage{graphicx}
+
+  
+%opening
+\title{neo4j performance and scalability evaluation}
+\author{WP9.2}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+this document evaluates scalability and performance of neo4j graph database in handling 
+large annotation data sets. It compares the results with the currently used mongodb. 
+\end{abstract}
+
+\section{Introduction}
+blah
+
+\section{Methodology/Setup}
+-annotaiton format
+-programs
+-deployement
+
+\section{Results}
+\begin{figure}
+\centering
+ \includegraphics[width=.7\textwidth]{fig/mongo-ret-scalability}
+ \caption{"mongo retrieval times (db is growing \emph{rep} records in each round, \emph{rep} random records are retrieved)}
+\end{figure}
+
+\begin{figure}
+\centering
+ \includegraphics[width=.7\textwidth]{fig/neo-ret-scalability}
+ \caption{neo4j retrieval scalability}
+\end{figure}
+
+\begin{figure}
+\centering
+ \includegraphics[width=.7\textwidth]{fig/creation}
+ \caption{Comparison of creation scalability}
+\end{figure}
+
+\begin{figure}
+\centering
+ \includegraphics[width=.7\textwidth]{fig/neovsmongo}
+ \caption{Scalability mongo vs. neo4j}
+\end{figure}
+
+
+
+
+\section{Summary}
+Performance results should never be the final result of any project. They, rather, constitute
+a starting point for further performance tuning. It is true for both mongo and neo4j. The database
+management engines offer many possibles for parameter tuning. 
+
+\end{document}
+

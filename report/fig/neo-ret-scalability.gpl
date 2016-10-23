@@ -1,0 +1,11 @@
+set output 'neo-ret-scalability.eps'
+set terminal postscript eps 18 color solid
+
+set xlabel "Round number"
+set ylabel "Time [s]"
+set yrange [0:3]
+set key left
+
+plot '1000/neo-result.csv.bytarget'  with lines title 'rep = 1000',\
+     '5000/neo-result.csv.bytarget' with lines title 'rep = 5000',\
+     '10000/neo-result.csv.bytarget' with lines title 'rep = 10000'
