@@ -26,31 +26,72 @@ blah
 -deployement
 
 \section{Results}
+We evaluated three metrics for each database:
+\begin{itemize}
+ \item creation times (creation of new, non-existing annotation),
+ \item annotation retrieval by target id,
+ \item annotation retrieval by body id.
+\end{itemize}
+
+The test time was divided into rounds and in each round all the above tests were 
+conducted in the given order. In each round firstly $rep$ number of records were 
+created, subsequently random (with repetition) $rep$ were retrieved by 
+specifying existing $target.jsonld_id$ and afterwards $rep$ random annotations 
+were fetched by $body.jsonld_id$. We measured time of each activity, that is 
+complete time to create records, time to retrieve all $rep$ record by target id 
+(or body id). Three time measurements were made in each round. Please note, that 
+no records were removed i.e., for given $rep=1000$, database grown in each round 
+by new 1000 record. 
+
+
 \begin{figure}
 \centering
- \includegraphics[width=.7\textwidth]{fig/mongo-ret-scalability}
- \caption{"mongo retrieval times (db is growing \emph{rep} records in each round, \emph{rep} random records are retrieved)}
+ \includegraphics[width=.7\textwidth]{fig/mongo-ret-scalability} 
+ \caption{"mongo retrieval times (db is growing \emph{rep} records in each round, \emph{rep} random records are retrieved)} \label{fig:mongo-ret}
 \end{figure}
+
 
 \begin{figure}
 \centering
  \includegraphics[width=.7\textwidth]{fig/neo-ret-scalability}
- \caption{neo4j retrieval scalability}
+ \caption{neo4j retrieval scalability (db is growing \emph{rep} records in each round, \emph{rep} random records are retrieved)} \label{fig:neo-ret}
 \end{figure}
+
+On Fig.~\ref{fig:mongo-ret} and Fig.~\ref{fig:neo-ret} we depicted the retrieval scalability 
+of each database. For that we conducted three experiments with different values of $rep$, each 
+had 10 rounds. Fig~\ref{fig:mongo-ret} shows that the performance of mongodb is 
+dramatically decreasing with the increasing size of the database. Also the absolute values 
+achieved by mongo are not very well, to retrieve $10000$ random annotations from a database 
+with $90 000$ documents, more than one minute is required. 
+
+The retrieval times for the same amount of data from the neo4j database of the same size is 
+much smaller as can be seen on Fig.~\ref{fig:neo-ret}. Also the scalability of neo4j is 
+much better, neo4j produces constant answer times regardless of the size of the database. 
+
 
 \begin{figure}
 \centering
  \includegraphics[width=.7\textwidth]{fig/creation}
- \caption{Comparison of creation scalability}
+ \caption{Comparison of creation scalability (\emph{rep} records are added in each round)} \label{fig:creation}
 \end{figure}
+
+The situation is a little bit different for creation times. We depicted them on 
+Fig.~\ref{fig:creation}. For smaller values of $rep$ neo4j outperforms mongo but 
+with $rep = 5000$ mongo is faster. We also conducted the tests for higher values of 
+$rep$ (not depicted for the sake of clarity) and mongo was also faster. neo4j 
+also displays high variance in the creation times. Perhaps further investigations
+are required there. 
 
 \begin{figure}
 \centering
  \includegraphics[width=.7\textwidth]{fig/neovsmongo}
- \caption{Scalability mongo vs. neo4j}
+ \caption{Scalability mongo vs. neo4j} \label{fig:mongovsneo}
 \end{figure}
 
-
+To provide direct comparison of read performance and scalability we conducted 
+a test with fixed $rep=5000$ and results are depicted on Fig.~\ref{fig:mongovsneo}.
+Neo4j is not only faster on in the whole spectrum of database size (rounds) but 
+also scales very well with the growth of the database what is not true for mongo.
 
 
 \section{Summary}
