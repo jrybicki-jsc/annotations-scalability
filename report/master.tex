@@ -50,9 +50,9 @@
 \maketitle
 
 \section{Introduction}
-EUDAT WP9 is a activity which looks into new technologies, evaluate their 
+EUDAT WP9 is a activity which scout out new technologies, evaluate their 
 applicability for building new services or substitute existing ones. In one of 
-its subtasks (WP9.2) it looks into graph databases. It was already shown that 
+its subtasks (WP9.2) deals with graph databases. It was already shown that 
 graph databases have the potential to provide different view on the stored 
 research data, enabling new type of search queries, and extracting insights 
 through graph-based analytics. To become new service or substitute existing
@@ -61,17 +61,17 @@ scalability. To this end, EUDAT Technical Committee charged WP9.2 with a task
 of evaluating performance and scalability of neo4j graph database.
 
 The neo4j graph database is widely used and it does not make much sense to 
-conduct generic scalability tests of this technology in EUDAT. It is much
-more sensible to do some EUDAT-specific tests. Optimally comparing the 
-performance of neo4j with a technology currently used in EUDAT. Unfortunately,
-there were not much performance tests done in EUDAT so far. Thus we have
-selected one candidate service (B2NOTE) which uses popular noSQL database (mongodb)
-as our benchmark. 
+conduct generic scalability tests of this technology in EUDAT. It is much more 
+sensible to do some EUDAT-specific tests. Optimally comparing the performance of 
+neo4j with a technology currently used in EUDAT. Unfortunately, there were not 
+many performance tests done in EUDAT so far, technology choices were based on 
+different factors. Thus, we have selected one candidate service (B2NOTE) which 
+uses popular noSQL database (mongo) as our benchmark. 
 
 \section{Methodology/Setup}
 B2NOTE service is implemented to enable semantic annotations of the documents 
 stored in the EUDAT domain. It uses W3C format for storing 
-annotations\footnote{https://www.w3.org/TR/annotation-model/} in mongodb. W3C 
+annotations\footnote{https://www.w3.org/TR/annotation-model/} in mongo. The W3C 
 web annotation data format is pretty simple: Each annotation is a relation 
 between a body (e.g. EUDAT data object), and target (e.g. metadata describing 
 that object). Basic annotation model is shown on Listing~\ref{lst:anno}.
@@ -103,9 +103,9 @@ metadata descriptions for given data object). But also a ``reverse'' lookup
 producing all the dataobjects with specific tag (i.e. a retrieval by target id) 
 embodies important functionality. From this requirements it becomes clear what 
 kind of queries the backend database has to deal with. Thus, we defined three 
-metrics for the database:
+metrics for the database evaluation:
 \begin{itemize}
- \item creation times (creation of new, non-existing annotation),
+ \item creation times (creation of new, non-existing annotations),
  \item annotation retrieval by target id,
  \item annotation retrieval by body id.
 \end{itemize}
@@ -113,26 +113,27 @@ metrics for the database:
 To obtain meaningful results it is important to minimize the number of ``moving 
 parts'' and reduce the testing environment to parts which are absolutely 
 necessary. In particular we were not interested in the performance of the B2NOTE 
-web interface or the performance penalty caused by integration with other EUDAT 
+web interface or the performance penalty caused by its integration with other EUDAT 
 services. Therefore we have written a simple program in Python with methods 
 for generating annotations with unique body and target id, and for retrieval
 of the data. The methods use simple interfaces to access different database
 stores: mongo and neo4j. We made sure that we are using the sample mongo API 
 as B2NOTE is currently using ($pymongo==3.3.0$). 
 
-To enable easy reproducibility of the conducted tests, a docker-based environment
-was prepared. Both technology providers (mongo and neo4j) offer official docker
-images for their databases. We created a docker image with our testing program
-and prepared a docker-composed-based testing environment. Given a system
-with running docker and docker-compose, starting tests is a matter of merely 
-issuing one command like: 
+To enable easy reproducibility of the conducted tests, a \texttt{docker}-based 
+environment was prepared. Both technology providers (mongo and neo4j) offer 
+official images for their databases. We created a \texttt{docker} image with our 
+testing program and prepared a \texttt{docker-compose}-based testing 
+environment. Given a system with running \texttt{docker} and 
+\texttt{docker-compose}, starting tests is a matter of merely issuing one 
+command like: 
 \begin{verbatim}
  $ docker-compose run tester --name experiment1 
 \end{verbatim}
 
 Also docker images for processing of the results and visualizing them are 
 provided. All the source code and documentation is stored in 
-github\footnote{https://github.com/httpPrincess/annotations-scalability} 
+GitHub\footnote{https://github.com/httpPrincess/annotations-scalability} 
 enabling verification and repetition of the tests. In fact we plan to 
 redo similar tests for different EUDAT-inspired use cases. 
 
@@ -143,16 +144,15 @@ The tests are defined by tree parameters:
  \item runs: number of rounds, 
  \item reps: number of repetitions in each round.
 \end{itemize}
-
-The tests were divided into rounds and in each round all the above database operations were 
-conducted in the given order. In each round firstly $reps$ number of records were 
-created, subsequently random (with repetition) $reps$ were retrieved by 
-specifying existing $target.jsonld_id$ and afterwards $reps$ random annotations 
-were fetched by $body.jsonld_id$. We measured time of each activity, that is 
-complete time to create records, time to retrieve all $reps$ record by target id 
-(or body id). Three time measurements were made in each round. Please note, that 
-no records were removed i.e., for given $reps = 1000$, database grown in each round 
-by new 1000 record. 
+The tests were divided into rounds and in each round all the above database 
+operations were conducted in the given order. In each round firstly $reps$ 
+number of records were created, subsequently random (with repetition) $reps$ 
+were retrieved by specifying existing $target.jsonld_id$ and afterwards $reps$ 
+random annotations were fetched by $body.jsonld_id$. We measured time of each 
+activity, that is complete time to create records, time to retrieve all $reps$ 
+record by target id (or body id). Three time measurements were made in each 
+round. Please note, that no records were removed i.e., for given $reps = 1000$, 
+database grown in each round by new 1000 record. 
 
 
 \begin{figure}
@@ -168,16 +168,18 @@ by new 1000 record.
  \caption{neo4j retrieval scalability (db is growing $reps$ records and $reps$ random records are retrieved in each round)} \label{fig:neo-ret}
 \end{figure}
 
-On Fig.~\ref{fig:mongo-ret} and Fig.~\ref{fig:neo-ret} we depicted the retrieval scalability 
-of each database. For that we conducted three experiments with different values of $reps$, each 
-had 10 rounds. Fig~\ref{fig:mongo-ret} shows that the performance of mongodb is 
-dramatically decreasing with the increasing size of the database. Also the absolute values 
-achieved by mongo are not very well, to retrieve $10000$ random annotations from a database 
-with $90 000$ documents, more than one minute is required. 
+On Fig.~\ref{fig:mongo-ret} and Fig.~\ref{fig:neo-ret} we depicted the retrieval 
+scalability of each database. For that we conducted three experiments with 
+different values of $reps$, each had 10 rounds. Fig~\ref{fig:mongo-ret} shows 
+that the performance of mongo is dramatically decreasing with the increasing 
+size of the database. Also the absolute values achieved by mongo are not very 
+well, to retrieve $10000$ random annotations from a database with $90 000$ 
+documents, more than one minute is required. 
 
-The retrieval times for the same amount of data from the neo4j database of the same size is 
-much smaller as can be seen on Fig.~\ref{fig:neo-ret}. Also the scalability of neo4j is 
-much better, neo4j produces constant answer times regardless of the size of the database. 
+The retrieval times for the same amount of data from the neo4j database of the 
+same size is much smaller as can be seen on Fig.~\ref{fig:neo-ret}. Also the 
+scalability of neo4j is much better, neo4j produces constant answer times 
+regardless of the size of the database. 
 
 
 \begin{figure}
@@ -187,11 +189,11 @@ much better, neo4j produces constant answer times regardless of the size of the 
 \end{figure}
 
 The situation is a little bit different for creation times. We depicted them on 
-Fig.~\ref{fig:creation}. For smaller values of $reps$ neo4j outperforms mongo but 
-with $reps = 5000$ mongo is faster. We also conducted the tests for higher values of 
-$reps$ (not depicted for the sake of clarity) and mongo was also faster. neo4j 
-also displays high variance in the creation times. Perhaps further investigations
-are required there. 
+Fig.~\ref{fig:creation}. For smaller values of $reps$ neo4j outperforms mongo 
+but with $reps = 5000$ mongo is faster. We also conducted the tests for higher 
+values of $reps$ (not depicted for the sake of clarity) and mongo was also 
+faster. neo4j also displays high variance in the creation times. Perhaps further 
+investigations are required there. 
 
 \begin{figure}
 \centering

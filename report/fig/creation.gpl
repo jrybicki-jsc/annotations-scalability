@@ -4,8 +4,8 @@ set terminal postscript eps 18 color solid
 set xlabel "Round number"
 set ylabel "Time [s]"
 
-plot "5000/mongo-result.csv.creation" with lines title "mongo: creation (rep = 5000)",\
-     "5000/neo-result.csv.creation" with lines title "neo: creation (rep = 5000)",\
-     "1000/mongo-result.csv.creation" with lines title "mongo: creation (rep = 1000)",\
-     "1000/neo-result.csv.creation" with lines title "neo: creation (rep = 1000)"
+plot "5000/mongo-result.csv.creation" with lines title "mongo: creation (reps = 5000)",\
+     "5000/neo-result.csv.creation" with lines title "neo: creation (reps = 5000)",\
+     "1000/mongo-result.csv.creation" with lines title "mongo: creation (reps = 1000)",\
+     "1000/neo-result.csv.creation" with lines title "neo: creation (reps = 1000)"
 

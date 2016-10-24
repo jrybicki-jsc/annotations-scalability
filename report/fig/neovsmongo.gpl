@@ -5,5 +5,5 @@ set xlabel "Round number"
 set ylabel "Time [s]"
 set key left
 
-plot '5000/mongo-result.csv.bytarget'  with lines title 'mongo (rep=5000)',\
-     '5000/neo-result.csv.bytarget' with lines title 'neo (rep=5000)'
+plot '5000/mongo-result.csv.bytarget'  with lines title 'mongo (reps = 5000)',\
+     '5000/neo-result.csv.bytarget' with lines title 'neo (reps = 5000)'
