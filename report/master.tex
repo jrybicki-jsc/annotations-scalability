@@ -50,8 +50,8 @@
 \maketitle
 
 \section{Introduction}
-EUDAT WP9 is a activity which scout out new technologies, evaluate their 
-applicability for building new services or substitute existing ones. In one of 
+EUDAT WP9 is an activity which scouts out new technologies, evaluate their 
+applicability for building new services or substitute existing ones. One of 
 its subtasks (WP9.2) deals with graph databases. It was already shown that 
 graph databases have the potential to provide different view on the stored 
 research data, enabling new type of search queries, and extracting insights 
@@ -101,8 +101,8 @@ These are crucial from the user perspective. It is to expect that the users will
 be interested to view list of all annotations for given body id (i.e. all 
 metadata descriptions for given data object). But also a ``reverse'' lookup 
 producing all the dataobjects with specific tag (i.e. a retrieval by target id) 
-embodies important functionality. From this requirements it becomes clear what 
-kind of queries the backend database has to deal with. Thus, we defined three 
+embodies important functionality. This expected usage scenarios were used 
+as corner stones for our tests. In particular, we defined three 
 metrics for the database evaluation:
 \begin{itemize}
  \item creation times (creation of new, non-existing annotations),
@@ -135,7 +135,8 @@ Also docker images for processing of the results and visualizing them are
 provided. All the source code and documentation is stored in 
 GitHub\footnote{https://github.com/httpPrincess/annotations-scalability} 
 enabling verification and repetition of the tests. In fact we plan to 
-redo similar tests for different EUDAT-inspired use cases. 
+reuse this framework to do some further testing of different EUDAT-inspired 
+use cases in the future. 
 
 \section{Results}
 The tests are defined by tree parameters:
@@ -147,12 +148,15 @@ The tests are defined by tree parameters:
 The tests were divided into rounds and in each round all the above database 
 operations were conducted in the given order. In each round firstly $reps$ 
 number of records were created, subsequently random (with repetition) $reps$ 
-were retrieved by specifying existing $target.jsonld_id$ and afterwards $reps$ 
-random annotations were fetched by $body.jsonld_id$. We measured time of each 
+were retrieved by specifying existing $target.id$ and afterwards $reps$ 
+random annotations were fetched by $body.id$. We measured time of each 
 activity, that is complete time to create records, time to retrieve all $reps$ 
 record by target id (or body id). Three time measurements were made in each 
 round. Please note, that no records were removed i.e., for given $reps = 1000$, 
 database grown in each round by new 1000 record. 
+
+All the tests were run on the same virtual machine with 4 VCPUs, 4GB RAM, using
+Ubuntu 16.04. 
 
 
 \begin{figure}
@@ -170,14 +174,15 @@ database grown in each round by new 1000 record.
 
 On Fig.~\ref{fig:mongo-ret} and Fig.~\ref{fig:neo-ret} we depicted the retrieval 
 scalability of each database. For that we conducted three experiments with 
-different values of $reps$, each had 10 rounds. Fig~\ref{fig:mongo-ret} shows 
+different values of $reps$, each had 10 rounds. Fig.~\ref{fig:mongo-ret} shows 
 that the performance of mongo is dramatically decreasing with the increasing 
 size of the database. Also the absolute values achieved by mongo are not very 
 well, to retrieve $10000$ random annotations from a database with $90 000$ 
 documents, more than one minute is required. 
 
 The retrieval times for the same amount of data from the neo4j database of the 
-same size is much smaller as can be seen on Fig.~\ref{fig:neo-ret}. Also the 
+same size is much smaller as can be seen on Fig.~\ref{fig:neo-ret} (please note 
+that the $y$ axis was scaled comparing to Fig.~\ref{fig:mongo-ret}). Also the 
 scalability of neo4j is much better, neo4j produces constant answer times 
 regardless of the size of the database. 
 
@@ -192,8 +197,11 @@ The situation is a little bit different for creation times. We depicted them on
 Fig.~\ref{fig:creation}. For smaller values of $reps$ neo4j outperforms mongo 
 but with $reps = 5000$ mongo is faster. We also conducted the tests for higher 
 values of $reps$ (not depicted for the sake of clarity) and mongo was also 
-faster. neo4j also displays high variance in the creation times. Perhaps further 
-investigations are required there. 
+faster. neo4j also displays high variance in the creation times and the values 
+fall down over time. This kind of behaviour can be caused by the fact that neo4j 
+is written in Java and Scala and JVM can need some time to ``warm up''. Perhaps 
+further investigations are required there, like warm-up phase before the actual 
+tests.  
 
 \begin{figure}
 \centering
@@ -208,9 +216,17 @@ also scales very well with the growth of the database what is not true for mongo
 
 
 \section{Summary}
-Performance results should never be the final result of any project. They, rather, constitute
-a starting point for further performance tuning. It is true for both mongo and neo4j. The database
-management engines offer many possibles for parameter tuning. 
+In this document we provided initial results of the neo4j performance and 
+scalability. The obtained results were based on EUDAT-inspired use cases of 
+storing semantic annotations. Our testing setup was pretty simple but 
+we belive it provides valuable insights into the scalability of the graph 
+database. 
+
+Performance results should never be the final result of any project. They, 
+rather, constitute a starting point for further performance tuning. It is true 
+for both mongo and neo4j. The database management engines offer many possibles 
+for parameter tuning. We intend to pass this report to B2NOTE developers as 
+we believe there are possibles to improve the performance of their solution. 
 
 \end{document}
 
