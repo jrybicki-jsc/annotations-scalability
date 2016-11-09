@@ -10,7 +10,7 @@ transparency, repeatability, and reproducibility of the results.
 ```docker-compose build```
 
 ```
-docker-compose run tester --name experiment1 sh -c ' sleep 20 && /app/test.py mongo 10 1000 && /app/test.py neo 10 1000'
+docker-compose run --name experiment1 tester sh -c ' sleep 20 && /app/test.py mongo 10 1000 && /app/test.py neo 10 1000'
 ```
 
 The testing application takes three parameters:
