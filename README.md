@@ -14,7 +14,7 @@ docker-compose run --name experiment1 tester sh -c ' sleep 20 && /app/test.py mo
 ```
 
 The testing application takes three parameters:
-* backend (mongo, neo, dummy)
+* backend (mongo, neo, neo-http, dummy)
 * number of runs
 * number of repetitions in each run (e.g. retrieval requests)
 
