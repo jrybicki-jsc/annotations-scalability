@@ -13,4 +13,5 @@ WORKDIR /results/
 CMD sleep 10 && \
     /app/test.py dummy 10 1000 && \
     /app/test.py neo 10 1000 &&  \
-    /app/test.py mongo 10 1000
+    /app/test.py mongo 10 1000 && \
+    /app/test.py sql 10 1000

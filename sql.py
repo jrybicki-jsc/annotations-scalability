@@ -96,8 +96,8 @@ def store_annotation(annotation, connection):
             "target_id": annotation['target']['jsonld_id'],
             "created": annotation['created']
         })
-
-    return cursor.fetchall()
+    cursor.close()
+    return None
 
 
 def retrieve_annotation_by_target(target_id, connection):

@@ -4,9 +4,14 @@ neo:
   image: neo4j:latest
   environment:
      - NEO4J_AUTH=none
+mysql:
+   image: mysql:latest
+   environment:
+      - MYSQL_ROOT_PASSWORD=root
 tester:
   build: .
   dockerfile: Dockerfile-tester
   links:
     - mongo
     - neo
+    - mysql
