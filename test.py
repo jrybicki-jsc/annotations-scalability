@@ -53,13 +53,13 @@ def test_creation(store_function, reps=10):
 def test_retrieval(retrieve_function, range_limit, reps=10):
     for _ in range(reps):
         random_id = randrange(1, range_limit)
-        _ = retrieve_function(random_id)
+        retrieve_function(random_id)
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Performance tester')
     parser.add_argument('module', choices=['neo', 'mongo', 'dummy',
-                                           'neo-http'])
+                                           'neo-http', 'sql'])
     parser.add_argument('runs', type=int, default=5)
     parser.add_argument('reps', type=int, default=10)
 
