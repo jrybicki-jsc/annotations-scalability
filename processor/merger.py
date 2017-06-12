@@ -5,7 +5,7 @@ import numpy as np
 
 
 def get_data_from_file(fname):
-    print 'Analyzing %s' %fname
+    print('Analyzing %s' % fname)
     writes = np.genfromtxt(fname, usecols=(1), delimiter=',')
     reads1 = np.genfromtxt(fname, usecols=(2), delimiter=',')
     reads2 = np.genfromtxt(fname, usecols=(3), delimiter=',')
@@ -27,14 +27,14 @@ def merge_data_from_files(file_list):
 
 def store_to_file(vector, fname):
     with open(fname, 'w') as f:
-        print 'Storing in %s (%d records)' % (fname, len(vector.mean(0)))
+        print('Storing in %s (%d records)' % (fname, len(vector.mean(0))))
         for i in range(0, len(vector.mean(0))):
             f.write('%f\t%f\n' % (vector.mean(0)[i], vector.std(0)[i]))
 
 
 if __name__ == '__main__':
     if len(sys.argv) < 2:
-        print 'Usage %s file1 file2 [...]' % sys.argv[0]
+        print('Usage %s file1 file2 [...]' % sys.argv[0])
         exit(1)
 
     w, r1, r2 = merge_data_from_files(sys.argv[1:])

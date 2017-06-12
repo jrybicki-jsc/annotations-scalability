@@ -99,7 +99,8 @@ if __name__ == "__main__":
             b.append(a)
 
     print(table)
-    with open('%s-result.csv' % wtt, 'wb') as f:
+    with open('%s%s-result.csv' % (wtt, time.strftime("-%Y%m%d-%H:%M:%S")),
+              'wb') as f:
         writer = csv.writer(f)
         writer.writerows(b)
 
