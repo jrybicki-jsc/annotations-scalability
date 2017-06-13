@@ -1,0 +1,13 @@
+#!/bin/sh
+
+for size in '1000' '5000' '10000';                                                                                                                                                                                                                                             
+do                                                                                                                                                                                                                                                                             
+   for j in `seq 1 3`;                                                                                                                                                                                                                                                         
+   do                                                                                                                                                                                                                                                                          
+      echo 'Processing for' $size 'and' $j                                                                                                                                                                                                                                     
+      cmd=$(printf "docker-compose run --volume=/results/%s/:/results/ --entrypoint \"/bin/sh -c 'sleep 10 && /app/test.py mongo 10 %s && /app/test.py neo 10 %s && /app/test.py sql 10 %s'\" tester" "$size" "$size" "$size" "$size")                                         
+      echo 'Executing', $cmd                                                                                                                                                                                                                                                   
+      eval $cmd                                                                                                                                                                                                                                                                
+      docker-compose kill && docker-compose rm -f                                                                                                                                                                                                                              
+   done                                                                                                                                                                                                                                                                        
+done
