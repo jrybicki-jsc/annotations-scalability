@@ -19,7 +19,7 @@ def create_tables(connection):
         "CREATE TABLE `annotations` ("
         "  `body_id` varchar(32) NOT NULL,"
         "  `target_id` varchar(32) NOT NULL,"
-        "  `created` date NOT NULL, "
+        "  `created` datetime NOT NULL, "
         " PRIMARY KEY (body_id, target_id)"
         ") ENGINE=InnoDB")}
 

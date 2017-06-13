@@ -25,7 +25,8 @@ def generate_body_id():
 
 
 def get_time():
-    return datetime.datetime.utcnow().strftime('%x')
+    return datetime.datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')
+
 
 
 def generate_annotation(time_generator, body_id_generator,
