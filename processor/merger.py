@@ -29,7 +29,7 @@ def store_to_file(vector, fname):
     with open(fname, 'w') as f:
         print('Storing in %s (%d records)' % (fname, len(vector.mean(0))))
         for i in range(0, len(vector.mean(0))):
-            f.write('%f\t%f\n' % (vector.mean(0)[i], vector.std(0)[i]))
+            f.write('%f\t%f\n' % (vector.mean(0)[i], vector.std(0, ddof=1)[i]))
 
 
 if __name__ == '__main__':
@@ -37,8 +37,18 @@ if __name__ == '__main__':
         print('Usage %s file1 file2 [...]' % sys.argv[0])
         exit(1)
 
-    w, r1, r2 = merge_data_from_files(sys.argv[1:])
+    flist = sys.argv[1:]
+    prefix = ''
+    if len(sys.argv) == 2:
+        #special use case with prefix
+        import glob
+        prefix = sys.argv[1]
+        flist = glob.glob(prefix+"*.csv")
+        prefix+='-'
 
-    store_to_file(w, 'writes.res')
-    store_to_file(r1, 'targets.res')
-    store_to_file(r2, 'bodies.res')
+    print('File list: %r' % flist)
+    w, r1, r2 = merge_data_from_files(file_list=flist)
+
+    store_to_file(w, prefix+'writes.res')
+    store_to_file(r1, prefix+'targets.res')
+    store_to_file(r2, prefix+'bodies.res')
