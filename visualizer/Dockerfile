@@ -8,5 +8,5 @@ RUN DBEIAN_FRONTEND=noninteractive apt-get update && \
 VOLUME /results/
 RUN mkdir /app/
 ADD . /app/
-WORKDIR /results/
-CMD for f in /app/*.gpl ; do gnuplot $f; done
+WORKDIR /
+CMD for f in /app/*.gpl ; do gnuplot $f; done && cp *.eps /results/
