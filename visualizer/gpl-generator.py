@@ -3,14 +3,14 @@ import sys
 
 # import glob
 
-HEADER = 'set terminal png\n' \
-         'set output "output.png"\n' \
+HEADER = 'set terminal postscript enhanced eps 24\n' \
+         'set output "output.eps"\n' \
          'set xlabel "Runs"\n' \
          'set ylabel "Time [ms]"\n\n'
 
 
 def decorate_single_file(fname):
-    return "'%s' u 1 w li, '%s' u 1:2 w errorbars notitle" % (fname, fname)
+    return "'%s' u 1:2 w errorbars notitle, '%s' u 1 w li lw 3 title \"%s\"" % (fname, fname, fname)
 
 
 if __name__ == "__main__":
