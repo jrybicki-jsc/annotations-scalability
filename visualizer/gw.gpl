@@ -1,9 +1,0 @@
-set terminal png
-set output "output.png"
-set xlabel "Runs"
-set ylabel "Time [ms]"
-
-
-plot '../journal-results/1000/mongo-bodies.res' u 1 w li, '../journal-results/1000/mongo-bodies.res' u 1:2 w errorbars notitle, \
-'../journal-results/1000/neo-bodies.res' u 1 w li, '../journal-results/1000/neo-bodies.res' u 1:2 w errorbars notitle, \
-'../journal-results/1000/sql-bodies.res' u 1 w li, '../journal-results/1000/sql-bodies.res' u 1:2 w errorbars notitle

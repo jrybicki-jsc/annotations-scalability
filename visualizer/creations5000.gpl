@@ -6,6 +6,6 @@ set ylabel "Time [ms]"
 
 set yrange [0:15]
 
-plot 'results/5000/mongo-writes.res' u 1:2 w errorbars notitle, 'results/5000/mongo-writes.res' u 1 w li lw 3 title "MongoDB (reps=5000)", \
-'results/5000/neo-writes.res' u 1:2 w errorbars notitle, 'results/5000/neo-writes.res' u 1 w li lw 3 title "neo4j (reps=5000)", \
-'results/5000/sql-writes.res' u 1:2 w errorbars notitle, 'results/5000/sql-writes.res' u 1 w li lw 3 title "mysql (reps=5000)"
+plot 'results/5000/mongo-writes.res'  w errorbars notitle, 'results/5000/mongo-writes.res' u 1 w li lw 3 title "MongoDB (reps=5000)", \
+'results/5000/neo-writes.res'  w errorbars notitle, 'results/5000/neo-writes.res' u 1 w li lw 3 title "neo4j (reps=5000)", \
+'results/5000/sql-writes.res'  w errorbars notitle, 'results/5000/sql-writes.res' u 1 w li lw 3 title "mysql (reps=5000)"
