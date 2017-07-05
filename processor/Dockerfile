@@ -10,4 +10,4 @@ RUN mkdir /app/
 ADD . /app/
 RUN chmod +x /app/spliter.sh /app/merger.py /app/mergeall.sh
 WORKDIR /results/
-CMD /app/spliter.sh
+CMD /app/mergeall.sh
