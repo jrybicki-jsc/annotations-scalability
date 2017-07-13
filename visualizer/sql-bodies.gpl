@@ -1,9 +1,9 @@
 set terminal postscript enhanced eps 24
 set output "sql-bodies.eps"
 set xlabel "Runs"
-set ylabel "Time [ms]"
+set ylabel "Time [s]"
 set yrange [0:6]
 
-plot 'results/1000/sql-bodies.res'  w errorbars notitle, 'results/1000/sql-bodies.res' u 1 w li lw 3 title "reps = 1000", \
-'results/5000/sql-bodies.res'  w errorbars notitle, 'results/5000/sql-bodies.res' u 1 w li lw 3 title "reps = 5000", \
-'results/10000/sql-bodies.res'  w errorbars notitle, 'results/10000/sql-bodies.res' u 1 w li lw 3 title "reps = 10000"
+plot 'results/1000/sql-bodies.res' u 1:2 w errorbars notitle, 'results/1000/sql-bodies.res' u 1 w li lw 3 title "reps = 1000", \
+'results/5000/sql-bodies.res' u 1:2 w errorbars notitle, 'results/5000/sql-bodies.res' u 1 w li lw 3 title "reps = 5000", \
+'results/10000/sql-bodies.res' u 1:2 w errorbars notitle, 'results/10000/sql-bodies.res' u 1 w li lw 3 title "reps = 10000"

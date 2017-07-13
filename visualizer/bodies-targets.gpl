@@ -1,0 +1,10 @@
+set terminal postscript enhanced eps 24
+set output "bodies-targets.eps"
+set xlabel "Runs"
+set ylabel "Time [s]"
+set yrange [0:6]
+
+plot 'results/10000/sql-bodies.res' u 1:2 w errorbars notitle, 'results/10000/sql-bodies.res' u 1 w li lw 3 title "MySQL: by body", \
+'results/10000/sql-targets.res' u 1:2 w errorbars notitle, 'results/10000/sql-targets.res' u 1 w li lw 3 title "MySQL: by target", \
+'results/10000/neo-bodies.res' u 1:2 w errorbars notitle, 'results/10000/neo-bodies.res' u 1 w li lw 3 title "neo4j: by body", \
+'results/10000/neo-targets.res' u 1:2 w errorbars notitle, 'results/10000/neo-targets.res' u 1 w li lw 3 title "neo4j: by target"

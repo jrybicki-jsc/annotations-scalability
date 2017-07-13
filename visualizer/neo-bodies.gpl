@@ -1,9 +1,9 @@
 set terminal postscript enhanced eps 24
 set output "neo-bodies.eps"
 set xlabel "Runs"
-set ylabel "Time [ms]"
+set ylabel "Time [s]"
 set yrange [0:3]
 
-plot 'results/1000/neo-bodies.res'  w errorbars notitle, 'results/1000/neo-bodies.res' u 1 w li lw 3 title "reps = 1000", \
-'results/5000/neo-bodies.res'  w errorbars notitle, 'results/5000/neo-bodies.res' u 1 w li lw 3 title "reps = 5000", \
-'results/10000/neo-bodies.res'  w errorbars notitle, 'results/10000/neo-bodies.res' u 1 w li lw 3 title "reps = 10000"
+plot 'results/1000/neo-bodies.res' u 1:2 w errorbars notitle, 'results/1000/neo-bodies.res' u 1 w li lw 3 title "reps = 1000", \
+'results/5000/neo-bodies.res' u 1:2 w errorbars notitle, 'results/5000/neo-bodies.res' u 1 w li lw 3 title "reps = 5000", \
+'results/10000/neo-bodies.res' u 1:2 w errorbars notitle, 'results/10000/neo-bodies.res' u 1 w li lw 3 title "reps = 10000"

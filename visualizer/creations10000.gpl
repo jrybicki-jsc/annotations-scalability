@@ -2,10 +2,10 @@ set terminal postscript enhanced eps 24
 set output "creations10000.eps"
 
 set xlabel "Runs"
-set ylabel "Time [ms]"
+set ylabel "Time [s]"
 
 set yrange [0:60]
 
-plot 'results/10000/mongo-writes.res'  w errorbars notitle, 'results/10000/mongo-writes.res' u 1 w li lw 3 title "MongoDB (reps=10000)", \
-'results/10000/neo-writes.res'  w errorbars notitle, 'results/10000/neo-writes.res' u 1 w li lw 3 title "neo4j (reps=10000)", \
-'results/10000/sql-writes.res'  w errorbars notitle, 'results/10000/sql-writes.res' u 1 w li lw 3 title "mysql (reps=10000)"
+plot 'results/10000/mongo-writes.res' u 1:2 w errorbars notitle, 'results/10000/mongo-writes.res' u 1 w li lw 3 title "MongoDB (reps=10000)", \
+'results/10000/neo-writes.res' u 1:2 w errorbars notitle, 'results/10000/neo-writes.res' u 1 w li lw 3 title "neo4j (reps=10000)", \
+'results/10000/sql-writes.res' u 1:2 w errorbars notitle, 'results/10000/sql-writes.res' u 1 w li lw 3 title "MySQL (reps=10000)"

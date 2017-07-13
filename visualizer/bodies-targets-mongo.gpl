@@ -1,0 +1,7 @@
+set terminal postscript enhanced eps 24
+set output "bodies-targets-mongo.eps"
+set xlabel "Runs"
+set ylabel "Time [s]"
+
+plot 'results/10000/mongo-bodies.res' u 1:2 w errorbars notitle, 'results/10000/mongo-bodies.res' u 1 w li lw 3 title "MongoDB: by body", \
+'results/10000/mongo-targets.res' u 1:2 w errorbars notitle, 'results/10000/mongo-targets.res' u 1 w li lw 3 title "MongoDB: by target"
