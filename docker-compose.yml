@@ -1,11 +1,11 @@
 mongo:
-  image: mongo:latest
+  image: mongo:3.4.5
 neo:
-  image: neo4j:latest
+  image: neo4j:3.2
   environment:
      - NEO4J_AUTH=none
 mysql:
-   image: mysql:latest
+   image: mysql:5.7.18
    environment:
       - MYSQL_ROOT_PASSWORD=root
 tester:
